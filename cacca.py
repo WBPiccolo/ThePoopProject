@@ -1,7 +1,7 @@
 from datetime import date
 
 class OggettoCacca(object):
-	def __init__(self, number, mattina, pome, sera, notte, ratio, string):
+	def __init__(self, number, mattina, pome, sera, notte, ratio, string, previousRatio):
 		self.number = number
 		self.mattina = mattina
 		self.pome = pome
@@ -9,6 +9,7 @@ class OggettoCacca(object):
 		self.notte = notte
 		self.ratio = ratio
 		self.string = string
+		self.previousRatio = previousRatio
 	def compare(self, item2):
 		if self.number < item2.number:
 			return -1
@@ -90,7 +91,7 @@ print()
 print("Sono passati "+str(differenza)+" giorni dall'inizio (08/12/19)")
 print()
 
-f = open("chat.txt", "r", encoding="utf8")
+f = open("C:\Workspaces\ThePoopProject\ThePoopProject\chat.txt", "r", encoding="utf8")
 for x in f:
 	orario = x[10:12]
 	if "Guglielmo: " in x:
@@ -205,25 +206,64 @@ eliaR = round((elia/differenza), 2)
 stepR = round((step/differenza), 2)
 gloriaR = round((gloria/differenza), 2)
 
-lista.append(OggettoCacca(benny, bennyM, bennyP, bennyS, bennyN, bennyR, 'benny = '))
-lista.append(OggettoCacca(me, meM, meP, meS, meN, meR, 'io = '))
-lista.append(OggettoCacca(boldro, boldroM, boldroP, boldroS, boldroN, boldroR, 'boldro = '))
-lista.append(OggettoCacca(claudia, claudiaM, claudiaP, claudiaS, claudiaN, claudiaR, 'claudia = '))
-lista.append(OggettoCacca(giulia, giuliaM, giuliaP, giuliaS, giuliaN, giuliaR, 'giulia = '))
-lista.append(OggettoCacca(veronica, veronicaM, veronicaP, veronicaS, veronicaN, veronicaR, 'veronica = '))
-lista.append(OggettoCacca(favero, faveroM, faveroP, faveroS, faveroN, faveroR, 'favero = '))
-lista.append(OggettoCacca(elia, eliaM, eliaP, eliaS, eliaN, eliaR, 'elia = '))
-lista.append(OggettoCacca(step, stepM, stepP, stepS, stepN, stepR, 'step = '))
-lista.append(OggettoCacca(gloria, gloriaM, gloriaP, gloriaS, gloriaN, gloriaR, 'gloria = '))
+readResults = open("C:/Workspaces/ThePoopProject/ThePoopProject/results.txt", "r")
 
-lista.sort(reverse = True, key=lambda x: (x.number))
+for dummy in readResults:
+   lines = []
+   for line in readResults:
+      lines.append(line)
+
+readResults.close()
+
+for thisLine in lines:
+   if "benny " in thisLine:
+      bennyPr = float(thisLine.replace('benny = ', ''))
+   elif "io " in thisLine:
+      ioPr = float(thisLine.replace('io = ', ''))
+   elif "boldro " in thisLine:
+      boldroPr = float(thisLine.replace('boldro = ', ''))
+   elif "claudia " in thisLine:
+      claudiaPr = float(thisLine.replace('claudia = ', ''))
+   elif "giulia " in thisLine:
+      giuliaPr = float(thisLine.replace('giulia = ', ''))
+   elif "veronica " in thisLine:
+      veronicaPr = float(thisLine.replace('veronica = ', ''))
+   elif "favero " in thisLine:
+      faveroPr = float(thisLine.replace('favero = ', ''))
+   elif "elia " in thisLine:
+      eliaPr = float(thisLine.replace('elia = ', ''))
+   elif "step " in thisLine:
+      stepPr = float(thisLine.replace('step = ', ''))	   
+   elif "gloria " in thisLine:
+      gloriaPr = float(thisLine.replace('gloria = ', ''))
+
+lista.append(OggettoCacca(benny, bennyM, bennyP, bennyS, bennyN, bennyR, 'benny = ', bennyPr))
+lista.append(OggettoCacca(me, meM, meP, meS, meN, meR, 'io = ', ioPr))
+lista.append(OggettoCacca(boldro, boldroM, boldroP, boldroS, boldroN, boldroR, 'boldro = ', boldroPr))
+lista.append(OggettoCacca(claudia, claudiaM, claudiaP, claudiaS, claudiaN, claudiaR, 'claudia = ', claudiaPr))
+lista.append(OggettoCacca(giulia, giuliaM, giuliaP, giuliaS, giuliaN, giuliaR, 'giulia = ', giuliaPr))
+lista.append(OggettoCacca(veronica, veronicaM, veronicaP, veronicaS, veronicaN, veronicaR, 'veronica = ', veronicaPr))
+lista.append(OggettoCacca(favero, faveroM, faveroP, faveroS, faveroN, faveroR, 'favero = ', faveroPr))
+lista.append(OggettoCacca(elia, eliaM, eliaP, eliaS, eliaN, eliaR, 'elia = ', eliaPr))
+lista.append(OggettoCacca(step, stepM, stepP, stepS, stepN, stepR, 'step = ', stepPr))
+lista.append(OggettoCacca(gloria, gloriaM, gloriaP, gloriaS, gloriaN, gloriaR, 'gloria = ', gloriaPr))
+
+lista.sort(reverse = True, key=lambda x: (x.number))      
+
+results = open("C:/Workspaces/ThePoopProject/ThePoopProject/results.txt", "w")
+results.write('\n')
 
 for obj in lista:
     print(obj.string, obj.number)
     print('con una ratio di ', obj.ratio, ' cacche al giorno')
+    print('la sua ratio precedente era: ', obj.previousRatio)
     print('di cui:')
     print('   ', obj.mattina, ' di mattina')
     print('   ', obj.pome, ' di pomeriggio')
     print('   ', obj.sera, ' di sera')
     print('   ', obj.notte, ' di notte')
     print(' ')
+    results.write(obj.string + str(obj.ratio))
+    results.write('\n')
+
+results.close()
