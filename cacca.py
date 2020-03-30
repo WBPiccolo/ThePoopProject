@@ -9,10 +9,10 @@ class OggettoCacca(object):
 		self.notte = notte
 		self.ratio = ratio
 		self.string = string
-	def compare(item1, item2):
-		if item1.number < item2.number:
+	def compare(self, item2):
+		if self.number < item2.number:
 			return -1
-		elif item1.number > item2.number:
+		elif self.number > item2.number:
 			return 1
 		else:
 			return 0			
